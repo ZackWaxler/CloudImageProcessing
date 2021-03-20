@@ -2,6 +2,62 @@
 	text-align: center;
 }
 
-h1 {
-	margin: 10px;
+body {
+  background-image: linear-gradient(to bottom right, #C5B4E3, lightblue);
+}
+
+.form-label {
+  color: white;
+  font-weight: bold;
+  font-size: 2em;
+}
+
+.title {
+	font-size: 3em;
+	font-weight: bold;
+}
+
+#overlay-container {
+	background-color: rgba(211,211, 211, 0.7);
+	padding: 3em;
+	padding-top: 2em;
+	-moz-border-radius: 50px;
+	-webkit-border-radius: 50px;
+	border-radius: 50px;
+}
+
+#overlay-canvas {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: -1;
+}
+
+#overlay-error {
+	display: none;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1;
+  background-image: linear-gradient(to bottom right, white, #ff6961);
+  opacity: 0.5;
+}
+
+.row {
+	margin: 0.5em;
+}
+
+#content {
+	margin-top: 2em;
+	position: absolute; 
+  top: 0;
+  z-index: 1000;
+  display: block;
+  margin-left: 20%;
+  width: 60%;
+	color: #d9f8fa;
 }
