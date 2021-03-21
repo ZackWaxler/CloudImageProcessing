@@ -65,9 +65,9 @@ def upload():
 			path = os.path.join(app.config['UPLOAD_FOLDER'], new_name)
 			file.save(path)
 
-			gray_url = ''
-			blur_url = ''
-			solar_url = ''
+			gray_url = '-'
+			blur_url = '-'
+			solar_url = '-'
 
 			# for each filter
 			# - Apply it & save to tmp
@@ -87,21 +87,20 @@ def upload():
 				filtered_name = new_name.replace(uid, uid + '_' + filter_type)
 
 				img.save(new_path)
-				# - Upload it
-				# - Redir user to links
 
 				pub_url = upload_file(new_path, 'cip-zw', object_name=filtered_name)
 				if filter_type == 'gray': gray_url = pub_url
 				elif filter_type == 'blur': blur_url = pub_url
 				elif filter_type == 'solar': solar_url = pub_url
 
-			return redirect(url_for('uploaded', gray_url=gray_url, blur_url=blur_url, solar_url=solar_url))
+			return redirect(url_for('uploaded', gray=gray_url, blur=blur_url, solar=solar_url))
 		return redirect(url_for('error')) # Error with file
 	return redirect(url_for('error')) # GET request
 
 @app.route('/uploaded')
 def uploaded():
-	return request.args.get('gray_url') + ' ' + request.args.get('blur_url') + ' ' + request.args.get('solar_url')
+	return render_template('uploaded.jinja.html', gray=req.args.get('gray'), blur=request.args.get('blur'), solar=request.args.get('solar'))
+	# return request.args.get('gray') + ' ' + request.args.get('blur') + ' ' + request.args.get('solar')
 
 @app.route('/error')
 def error():
