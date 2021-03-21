@@ -18,15 +18,15 @@
   		<div class="container" id="overlay-container">
     		<form class="processing-form" action="upload" method="post" enctype="multipart/form-data">
 			    <div class="row">
-						<label class="form-label" id="image-form-label" for="image">Select an image to upload</label>
+						<label class="form-label" id="image-form-label" for="image">&nbsp;Select an image to upload</label>
 						<input class="image-input form-control" type="file" name="image" />
 			    </div>
 			    <br />
 			    <div class="row">
 			    	<div class="form-check">
-							<p class="form-label">Choose One or More Filters</p>
+							<p class="form-label" id="filter-form-label">Choose One or More Filters</p>
 							<hr>
-						  <input class="form-check-input" type="checkbox" value="" name="gray">
+						  <input class="form-check-input" type="checkbox" value="gray" name="gray">
 						  <label class="form-check-label" for="gray">
 						    Gray
 						  </label>
@@ -36,6 +36,12 @@
 						  <input class="form-check-input" type="checkbox" value="blur" name="blur">
 						  <label class="form-check-label" for="blur">
 						    Blur
+						  </label>
+						</div>
+						<div class="form-check">
+						  <input class="form-check-input" type="checkbox" value="solar" name="solar">
+						  <label class="form-check-label" for="solar">
+						    Solarize
 						  </label>
 						</div>
 			    </div>
