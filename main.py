@@ -9,6 +9,7 @@ from PIL import Image, ImageOps, ImageFilter
 import boto3
 import logging
 from botocore.exceptions import ClientError
+from boto3.s3.transfer import S3Transfer
 
 UPLOAD_FOLDER = './temp_storage'
 ALLOWED_EXTENSIONS = { 'png', 'jpg', 'jpeg' }
@@ -22,12 +23,17 @@ def upload_file(file_name, bucket, object_name=None):
 		object_name = file_name
 
 	s3_client = boto3.client('s3')
+	transfer = S3Transfer(s3_client)
+
+	pub_url = None
+
 	try:
-		response = s3_client.upload_file(file_name, bucket, object_name)
+		response = transfer.upload_file(file_name, bucket, object_name, extra_args={'ACL': 'public-read'})
+		pub_url = f'https://{bucket}.s3.amazonaws.com/{object_name}'
 	except ClientError as e:
 		logging.error(e)
 		return False
-	return True
+	return pub_url
 
 def allowed_file(filename):
   return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -59,18 +65,22 @@ def upload():
 			path = os.path.join(app.config['UPLOAD_FOLDER'], new_name)
 			file.save(path)
 
+			gray_url = ''
+			blur_url = ''
+			solar_url = ''
+
 			# for each filter
 			# - Apply it & save to tmp
 			for filter_type in filters:
 				img = Image.open(path)
 
-				if filter_type is 'gray':
+				if filter_type == 'gray':
 					img = ImageOps.grayscale(img)	
 				
-				if filter_type is 'blur':
+				if filter_type == 'blur':
 					img = img.filter(ImageFilter.BLUR)		
 
-				if filter_type is 'solar':
+				if filter_type == 'solar':
 					img = ImageOps.solarize(img, threshold=80) 
 
 				new_path = path.replace(uid, uid + '_' + filter_type)
@@ -80,15 +90,18 @@ def upload():
 				# - Upload it
 				# - Redir user to links
 
-				upload_file(new_path, 'cip-zw', object_name=filtered_name)
+				pub_url = upload_file(new_path, 'cip-zw', object_name=filtered_name)
+				if filter_type == 'gray': gray_url = pub_url
+				elif filter_type == 'blur': blur_url = pub_url
+				elif filter_type == 'solar': solar_url = pub_url
 
-			return redirect(url_for('uploaded'))
+			return redirect(url_for('uploaded', gray_url=gray_url, blur_url=blur_url, solar_url=solar_url))
 		return redirect(url_for('error')) # Error with file
 	return redirect(url_for('error')) # GET request
 
 @app.route('/uploaded')
 def uploaded():
-	return 'working'
+	return request.args.get('gray_url') + ' ' + request.args.get('blur_url') + ' ' + request.args.get('solar_url')
 
 @app.route('/error')
 def error():
