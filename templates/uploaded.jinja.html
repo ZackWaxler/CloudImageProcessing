@@ -17,7 +17,13 @@
 
   		<div class="container" id="overlay-container">
   			{% if gray %}
-	  			<img src="{{ gray }}" alt="">
+	  			<img src="{{ gray }}" alt="Grayscale">
+	  		{% endif %}
+  			{% if blur %}
+	  			<img src="{{ blur }}" alt="Blurred">
+	  		{% endif %}
+  			{% if solar %}
+	  			<img src="{{ solar }}" alt="Solar">
 	  		{% endif %}
     	</div>
   	</div>
