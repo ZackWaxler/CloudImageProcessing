@@ -73,11 +73,14 @@ def upload():
 				if filter_type is 'solar':
 					img = ImageOps.solarize(img, threshold=80) 
 
-				img.save(path.replace(uid, uid + '_' + filter_type))
+				new_path = path.replace(uid, uid + '_' + filter_type)
+				filtered_name = new_name.replace(uid, uid + '_' + filter_type)
+
+				img.save(new_path)
 				# - Upload it
 				# - Redir user to links
 
-			# upload_file(os.path.join(app.config['UPLOAD_FOLDER'], new_name), 'cloudimageprocessing-zw', object_name=new_name)
+				upload_file(new_path, 'cip-zw', object_name=filtered_name)
 
 			return redirect(url_for('uploaded'))
 		return redirect(url_for('error')) # Error with file
