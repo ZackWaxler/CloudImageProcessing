@@ -99,7 +99,7 @@ def upload():
 
 @app.route('/uploaded')
 def uploaded():
-	return render_template('uploaded.jinja.html', gray=req.args.get('gray'), blur=request.args.get('blur'), solar=request.args.get('solar'))
+	return render_template('uploaded.jinja.html', gray=request.args.get('gray'), blur=request.args.get('blur'), solar=request.args.get('solar'))
 	# return request.args.get('gray') + ' ' + request.args.get('blur') + ' ' + request.args.get('solar')
 
 @app.route('/error')
